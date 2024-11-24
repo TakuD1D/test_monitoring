@@ -7,7 +7,7 @@ services:
       - ./prom_config:/etc/prometheus/
       - metrics_data:/prometheus
     ports:
-      - 28001:9090
+      - ????:9090　# 自分たちが割り振られている範囲のhostport:containerport
     restart: always
     networks:
       - monitoring_default
@@ -15,15 +15,15 @@ services:
     image: grafana/grafana
     container_name: grafana
     ports:
-      - 28002:3000
+      - ????:3000   # 自分たちが割り振られている範囲のhostport:containerport
 
     volumes:
       - ./grafana/dashboard:/var/lib/grafana/dashboards
       - ./grafana/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
       - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
     restart: always
-    environment:
-      - DS_PROMETHEUS=default
+    environment:　# 意味なし消す
+      - DS_PROMETHEUS=default # 意味なし消す
     networks:
       - monitoring_default
 
@@ -38,8 +38,6 @@ services:
       - "--log.level=debug"
     expose:
       - '9093'
-        #ports: 
-        #- '28003:9093'
     restart: always
     networks:
       - monitoring_default
@@ -49,10 +47,6 @@ services:
     container_name: node-exporter
     expose:
       - '9100'
-        #network_mode: host
-        #pid: host
-        #ports: 
-        # - "28005:9100" # host:28005
     networks:
       - monitoring_default
   gpu-exporter:
