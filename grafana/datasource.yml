@@ -5,5 +5,5 @@ datasources:
    - name: prometheus-server
      type: prometheus
      url: 'http://tkmk-prometheus:9090/'
-     uid: 'prometheus-server-uid'
+     uid: 'prometheus-server-uid' # uidをgpu_expoterにも設定しておく
 
