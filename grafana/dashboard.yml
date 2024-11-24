@@ -3,18 +3,20 @@ apiVersion: 1
 
 providers:
   - name: 'node-exporter-full'
+    folder: Server
     type: file
     disableDeletion: false
     updateIntervalSeconds: 10
     options:
-      path: /etc/grafana/provisioning/datasources/dashboard/node_exporter.json
+      path: /var/lib/grafana/dashboards/node_exporter.json
       foldersFromFilesStructure: false
 
-  - name: 'gpu_exporter'
+  - name: 'gpu-exporter'
+    folder: Server
     type: file
     disableDeletion: false
     updateIntervalSeconds: 10
     options:
-      path: /etc/grafana/provisioning/datasources/dashboard/gpu_exporter.json
+      path: /var/lib/grafana/dashboards/gpu_exporter.json
       foldersFromFilesStructure: false
 

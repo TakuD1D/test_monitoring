@@ -18,10 +18,12 @@ services:
       - 28002:3000
 
     volumes:
-      - ./grafana/dashboard:/etc/grafana/provisioning/datasources
+      - ./grafana/dashboard:/var/lib/grafana/dashboards
       - ./grafana/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
       - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
     restart: always
+    environment:
+      - DS_PROMETHEUS=default
     networks:
       - monitoring_default
 

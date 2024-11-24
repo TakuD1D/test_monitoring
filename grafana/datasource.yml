@@ -3,6 +3,7 @@ apiVersion: 1
 
 datasources:
    - name: prometheus-server
-     type: 'prometheus'
-     url: 'http://tkmk-prometheus:9090'
+     type: prometheus
+     url: 'http://tkmk-prometheus:9090/'
+     uid: 'prometheus-server-uid'
 
