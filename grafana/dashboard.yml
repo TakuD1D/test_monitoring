@@ -1,6 +1,6 @@
 apiVersion: 1
 
-
+# node-exporterとgpu-exporterを初期から作っておく
 providers:
   - name: 'node-exporter-full'
     folder: Server
