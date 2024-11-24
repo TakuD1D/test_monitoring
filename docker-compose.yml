@@ -1,0 +1,95 @@
+services:
+  tkmk-prometheus:
+    image: prom/prometheus
+    user: root
+    container_name: tkmk-prometheus
+    volumes:
+      - ./prom_config:/etc/prometheus/
+      - metrics_data:/prometheus
+    ports:
+      - 28001:9090
+    restart: always
+    networks:
+      - monitoring_default
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 28002:3000
+
+    volumes:
+      - ./grafana/dashboard:/etc/grafana/provisioning/datasources
+      - ./grafana/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
+      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+    restart: always
+    networks:
+      - monitoring_default
+
+  alertmanager:
+    image: prom/alertmanager
+    container_name: alertmanager
+    volumes:
+      - ./alertmanager:/etc/alertmanager # Configuration file
+    
+    command:
+      - "--config.file=/etc/alertmanager/alert-config.yml" # See GitHub : https://github.com/prometheus/alertmanager
+      - "--log.level=debug"
+    expose:
+      - '9093'
+        #ports: 
+        #- '28003:9093'
+    restart: always
+    networks:
+      - monitoring_default
+
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter
+    expose:
+      - '9100'
+        #network_mode: host
+        #pid: host
+        #ports: 
+        # - "28005:9100" # host:28005
+    networks:
+      - monitoring_default
+  gpu-exporter:
+    image: utkuozdemir/nvidia_gpu_exporter:1.1.0
+    # build:
+    #   context: .
+    #   dockerfile: nvidia_gpu_exporter/Dockerfile
+    container_name: nvidia-smi-exporter
+    expose:
+      - '9835'
+        #ports: 
+        # - '28004:9835' # host:28004
+    restart: unless-stopped
+    networks:
+      - monitoring_default
+    devices:
+     - /dev/nvidiactl:/dev/nvidiactl
+     - /dev/nvidia0:/dev/nvidia0
+    volumes:
+      - /usr/lib/x86_64-linux-gnu/libnvidia-ml.so:/usr/lib/x86_64-linux-gnu/libnvidia-ml.so
+      - /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1:/usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1
+      - /usr/bin/nvidia-smi:/usr/bin/nvidia-smi
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
+
+volumes:
+  metrics_data:
+    external: true
+
+networks:
+  monitoring_default:
+    external: true
+
+
