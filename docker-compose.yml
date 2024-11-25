@@ -12,18 +12,23 @@ services:
     networks:
       - monitoring_default
   grafana:
-    image: grafana/grafana
+    # image: grafana/grafana
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: grafana
     ports:
       - 28002:3000
 
     volumes:
-      - ./grafana/dashboard:/var/lib/grafana/dashboards
+      # - ./grafana/dashboard:/var/lib/grafana/dashboards
       - ./grafana/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
       - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
     restart: always
-    environment:
-      - DS_PROMETHEUS=default
+    # entrypoint: "bash /var/lib/grafana/dashboards/json_sub.sh"
+    # environment:
+      # - DS_PROMETHEUS=prometheus-server-uid # uid設定の変数
+
     networks:
       - monitoring_default
 

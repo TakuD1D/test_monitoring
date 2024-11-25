@@ -17,6 +17,6 @@ providers:
     disableDeletion: false
     updateIntervalSeconds: 10
     options:
-      path: /var/lib/grafana/dashboards/gpu_exporter.json
+      path: /var/lib/grafana/dashboards/gpu_exporters.json
       foldersFromFilesStructure: false
 
