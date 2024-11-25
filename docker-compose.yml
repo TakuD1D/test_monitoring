@@ -3,11 +3,14 @@ services:
     image: prom/prometheus
     user: root
     container_name: tkmk-prometheus
+    ports:
+      - 28001:9090 # 自分たちが割り振られている範囲のhostport:containerport
     volumes:
       - ./prom_config:/etc/prometheus/
       - metrics_data:/prometheus
-    ports:
-      - ????:9090　# 自分たちが割り振られている範囲のhostport:containerport
+    command: 
+      - "--config.file=/etc/prometheus/prometheus.yml" # これ追加しないとloaderrorが出る
+      - "--storage.tsdb.retention.time=7d" # データ保持期間 resource管理のみなので
     restart: always
     networks:
       - monitoring_default
@@ -18,10 +21,11 @@ services:
       dockerfile: Dockerfile
     container_name: grafana
     ports:
-      - ????:3000   # 自分たちが割り振られている範囲のhostport:containerport
+      - 28002:3000   # 自分たちが割り振られている範囲のhostport:containerport
 
     volumes:
       # - ./grafana/dashboard:/var/lib/grafana/dashboards
+      # - ./grafana/config/***.ini:/etc/grafana/grafana.ini
       - ./grafana/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
       - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
     restart: always
@@ -74,20 +78,22 @@ services:
       - /usr/lib/x86_64-linux-gnu/libnvidia-ml.so:/usr/lib/x86_64-linux-gnu/libnvidia-ml.so
       - /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1:/usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1
       - /usr/bin/nvidia-smi:/usr/bin/nvidia-smi
-    deploy:
-      resources:
-        limits:
-          memory: 500M
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities:
-                - gpu
+    # いらない
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 500M
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities:
+    #             - gpu
 
 volumes:
   metrics_data:
-    external: true
+    name: metrics_data
+    # external: true
 
 networks:
   monitoring_default:
