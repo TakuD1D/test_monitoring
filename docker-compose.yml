@@ -10,7 +10,7 @@ services:
       - metrics_data:/prometheus
     command: 
       - "--config.file=/etc/prometheus/prometheus.yml" # これ追加しないとloaderrorが出る
-      - "--storage.tsdb.retention.time=7d" # データ保持期間 resource管理のみなので
+      - "--storage.tsdb.retention.time=3d" # データ保持期間 resource管理のみなので
     restart: always
     networks:
       - monitoring_default
@@ -89,6 +89,25 @@ services:
     #           count: all
     #           capabilities:
     #             - gpu
+  
+  docker_exporter:
+    build:
+      context: .
+      dockerfile: ./docker_exporter/Dockerfile
+    container_name: docker-exporter
+    volumes:
+      - ./docker_exporter/exporter_py/exporter.py:/exporter/exporter.py
+      - /usr/bin/docker:/usr/bin/docker
+      - /var/run/user/31035/docker.sock:/var/run/docker.sock
+    restart: always
+    expose:
+      - '9999' # start_http_serverでスタートさせたexporterのport
+    tty: true
+    entrypoint: >
+      python3 /exporter/exporter.py
+    networks:
+      - monitoring_default
+
 
 volumes:
   metrics_data:

@@ -20,3 +20,13 @@ providers:
       path: /var/lib/grafana/dashboards/gpu_exporters.json
       foldersFromFilesStructure: false
 
+  - name: 'docker-exporter'
+    folder: Docker
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    options:
+      path: /var/lib/grafana/dashboards/docker_exporter.json
+      foldersFromFilesStructure: false
+
+
