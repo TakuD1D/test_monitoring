@@ -1,6 +1,6 @@
 global: # Global変数
   resolve_timeout: 5m # この時間Prometheusから何も送信されなければ回復アラートを送信する 
-  slack_api_url: "https://hooks.slack.com/services/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" # ***はslackapiから
+  slack_api_url: "https://hooks.slack.com/services/****" # ***はslackapiから
 route:
   receiver: 'default' # default receiver : アラートがいずれにも分離されない場合、これがアラートを処理する
   group_by: ['alertname', 'instance', 'severity', 'channel']
