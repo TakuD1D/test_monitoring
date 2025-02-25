@@ -6,7 +6,7 @@ groups: # Alert Group
         for: 1m # Duration : exprsがこの時間続いたらアラートを送信
         labels: # Alert Managerのreceiverを決定するときに使用するラベル
           severity: warning # アラートの重要度や
-          channel: alert-test # 送信するチャンネルなどを指定する
+          channel: octa-alert-test # 送信するチャンネルなどを指定する
         annotations: # Alert Txt : 事象発生時や回復時のテキスト
           firing_text: "Instance {{ $labels.instance }} down" # .CommonAnnotations.firing_textでAlert Managerから参照できる
           resolved_text: "Instance {{ $labels.instance }} up" # 同様に.CommonAnnotations.resolved_textでAlert Managerから参照できる
@@ -18,7 +18,10 @@ groups: # Alert Group
         for: 1m
         labels:
           severity: critical
-          channel: alert-test
+          channel: octa-alert-test
         annotations:
           firing_text: "Instance {{ $labels.instance }} used more than 90% of Disk"
           resolved_text: "Instance {{ $labels.instance }} up"
+
+    # (memory , cpu) Usage
+    # gpu memory

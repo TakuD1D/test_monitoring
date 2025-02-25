@@ -1,6 +1,6 @@
 global: # Global変数
   resolve_timeout: 5m # この時間Prometheusから何も送信されなければ回復アラートを送信する 
-  slack_api_url: "https://hooks.slack.com/services/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" # ***はslackapiから
+  slack_api_url: "https://hooks.slack.com/services/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" # ***はslackapiから
 route:
   receiver: 'default' # default receiver : アラートがいずれにも分離されない場合、これがアラートを処理する
   group_by: ['alertname', 'instance', 'severity', 'channel']
@@ -10,7 +10,7 @@ route:
 
   routes:
     - matchers: # チャンネル名で分岐処理
-      - channel = alert-test
+      - channel = octa-alert-test
         #receiver: 'critical-alert' # receiverを選択
       routes:
         - matchers: # 特定のアラート名で分岐処理(group_waitなどを個別に設定するため)
@@ -33,15 +33,15 @@ route:
 
 receivers: # Define Each Receiver
   - name: 'default' # Nothing
-    slack_configs:
-      - channel: '#alert-test'
-        title: 'test'
-        text: 'test'
+    # slack_configs:
+    #   - channel: '#octa-alert-test'
+    #     title: 'test'
+    #     text: 'test'
 
 
   - name: 'critical-alert' # general-channel(任意)というSlackチャンネルにアラートを送信する
     slack_configs:
-      - channel: '#alert-test' # Channel Name (なくてもいい, わかりやすくするために書いている
+      - channel: '#octa-alert-test' # Channel Name (なくてもいい, わかりやすくするために書いている
         # 使用可能な変数等を用いてアラートメッセージを作成
         title: '{{ if eq .Status "firing" }}[FIRING]{{else}}[RESOLVED]{{end}} 
                  {{ .GroupLabels.alertname }}'
@@ -51,7 +51,7 @@ receivers: # Define Each Receiver
   # 以下も同様
   - name: 'warning-alert'
     slack_configs:
-      - channel: '#alert-test' 
+      - channel: '#octa-alert-test' 
         title: '{{ if eq .Status "firing" }}[FIRING]{{else}}[RESOLVED]{{end}}
                   {{ .GroupLabels.alertname }}'
         text: '{{ if eq .Status "firing" }}{{ .CommonAnnotations.firing_text }}{{else}}
